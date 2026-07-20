@@ -16,7 +16,9 @@ public interface WebDriverUtil {
 
     public void logOutOfSite();
 
-    public void populateDocElement(String docElementName, String value);
+    public void populateDocElement(WebElement element, String value);
 
     void navigateSite(String caLogin);
+
+    public void quitChromeWebDriver();
 }
