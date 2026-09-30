@@ -1,21 +1,24 @@
 package com.wds.accountBatch;
 
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-//import io.github.bonigarcia.wdm.WebDriverManager;
-//import io.github.bonigarcia.wdm.managers.ChromeDriverManager;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.PropertySource;
 
 @SpringBootApplication
-public class AccountBatchApplication {
+@PropertySource("classpath:application.properties")
+public class AccountBatchApplication implements CommandLineRunner {
 
-	public static void main(String[] args) {
+    public static void main(String[] args) {
+        ApplicationContext ctx = new AnnotationConfigApplicationContext();
+        SpringApplication.run(AccountBatchApplication.class, args);
 
-		SpringApplication.run(AccountBatchApplication.class, args);
-	}
+    }
 
-
-	private void setup(){
-		System.out.println("Setting properties.");
-		System.setProperty("webdriver.chrome.driver", "C:\\Program Files\\Google\\Chrome Beta\\Application");
-	}
+    @Override
+    public void run(String... args) throws Exception {
+          
+    }
 }

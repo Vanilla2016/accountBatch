@@ -1,4 +1,4 @@
-package com.wds.accountBatch.extensions;
+package extensions;
 
 import org.junit.jupiter.api.extension.ConditionEvaluationResult;
 import org.junit.jupiter.api.extension.ExecutionCondition;

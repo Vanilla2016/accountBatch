@@ -4,10 +4,12 @@ import org.openqa.selenium.WebElement;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+
 @Component
 public interface WebDriverUtil {
 
     public void logIntoSite();
+
     public void initializeWebDriver();
 
     public WebElement getDocElement(String elementName);
