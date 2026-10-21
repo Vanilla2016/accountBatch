@@ -16,7 +16,7 @@ import java.time.Duration;
 
 //In Test context this must be used rather than standard PropertySource
 @TestPropertySource("classpath:application.properties")
-public class DriverManagementPreExtension implements BeforeEachCallback {
+public class DriverManagementPreExtension implements BeforeAllCallback {
     private boolean initialized = false;
     protected WebDriver driver;
     protected ElementUtils elementUtils;
@@ -25,16 +25,14 @@ public class DriverManagementPreExtension implements BeforeEachCallback {
     protected String propertiesPathTest;
 
     @Override
-    public void beforeEach (ExtensionContext extensionContext) throws Exception {
+    public void beforeAll (ExtensionContext extensionContext) throws Exception {
         if (!initialized) {
                 initialized = true;
-
                 driver = BrowserUtils.getDriver();
                 elementUtils =  new ElementUtils(driver);
                 Long implicit_wait_duration = Long.valueOf(ConfigReader.getProperty("implicit_wait"));
                 driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(implicit_wait_duration));
                 driver.manage().window().maximize();
-
                 extensionContext
                         .getRoot()
                         .getStore(ExtensionContext.Namespace.GLOBAL)

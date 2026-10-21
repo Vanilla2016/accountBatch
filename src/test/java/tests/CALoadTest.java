@@ -16,10 +16,14 @@ import pages.CAPacPage;
 import pages.CAWelcomePage;
 import utils.ElementUtils;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.BrowserUtils.driver;
-@SpringBootTest(classes = {CAWelcomePage.class, CALoginPage.class, CAPacPage.class})
-@ExtendWith({DriverManagementPreExtension.class})
+@SpringBootTest(classes = {CAWelcomePage.class,
+                                CALoginPage.class, CAPacPage.class})
+@ExtendWith({DriverManagementPreExtension.class,
+                                DriverManagementPostExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
 public class CALoadTest {
@@ -40,7 +44,6 @@ public class CALoadTest {
      * Have to set the driver as an object. Cannot be Autowired as is jarred class. */
     @Test
     void testLoadCAWelcomeAndNavigateToWelcome() {
-
         String title;
         welcomePage.setWebDriver(driver);
         elementUtils = new ElementUtils(driver);
@@ -51,14 +54,13 @@ public class CALoadTest {
         /* Maybe put condition that no Exception thrown */
        // welcomePage.clickLogOnOrRegister();
     }
-
     @Test
     void testIsLoginSuccesful() {
         loginPage.setWebDriver(driver);
         String title = loginPage.getTitle();
-        assertThat(title.equalsIgnoreCase("Welcome to Cater Allen Private Bank"));
+        assertThat(title.equalsIgnoreCase(
+                    "Welcome to Cater Allen Private Bank"));
     }
-
     @Test
     public void testIdEntered() {
         loginPage.setWebDriver(driver);
@@ -67,10 +69,8 @@ public class CALoadTest {
         loginPage.drive();
         loginPage.enterUserId();
         assertThat(loginPage.getEnteredLogInId().
-                equalsIgnoreCase(loginPage.getUserId()));
+                             equalsIgnoreCase(loginPage.getUserId()));
     }
-
-
     @Test
     void TestPacEnteredSuccesfully() {
         String title;
@@ -83,17 +83,13 @@ public class CALoadTest {
 
         cAPacPage.enterPacCode();
 
-        /*
-        String [] pacArray = caPacNo.split(",");
-        List<String> pacNos = localDriver.getPacNos();
+       String [] pacArray = cAPacPage.getPacNo().split(",");
+       String [] enteredPacNos = cAPacPage.getEnteredPacCodes();
 
-        for (String pacNo: pacNos){
-            System.out.println(pacNo);
-            int pacNoCount = 0;
-            //assert pacNo != null;
-            assertThat(pacNo).isEqualTo(pacArray[pacNoCount]);
-            pacNoCount++;
+        int pacNoCount = 0;
+        for (String pacNo: pacArray){
+                assertThat(pacNo).isEqualTo(pacArray[pacNoCount]);
+                pacNoCount++;
         }
-         */
     }
 }

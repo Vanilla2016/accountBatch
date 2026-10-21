@@ -5,11 +5,11 @@ import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.openqa.selenium.WebDriver;
 
-public class DriverManagementPostExtension implements AfterEachCallback {
+public class DriverManagementPostExtension implements AfterAllCallback {
 
     protected WebDriver driver;
     @Override
-    public void afterEach(ExtensionContext extensionContext) throws Exception {
+    public void afterAll(ExtensionContext extensionContext) throws Exception {
 
          driver = (WebDriver) extensionContext
                 .getRoot()
