@@ -14,6 +14,7 @@ import org.springframework.test.context.TestPropertySource;
 import pages.CALoginPage;
 import pages.CAPacPage;
 import pages.CAWelcomePage;
+import pages.OTPPage;
 import utils.ElementUtils;
 
 import java.util.List;
@@ -21,11 +22,12 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 import static utils.BrowserUtils.driver;
 @SpringBootTest(classes = {CAWelcomePage.class,
-                                CALoginPage.class, CAPacPage.class})
+                                CALoginPage.class, CAPacPage.class, OTPPage.class})
 @ExtendWith({DriverManagementPreExtension.class,
                                 DriverManagementPostExtension.class})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestPropertySource(locations = "classpath:application-test.properties")
+
 public class CALoadTest {
 
     @Autowired
@@ -36,6 +38,9 @@ public class CALoadTest {
 
     @Autowired
     private CAPacPage cAPacPage;
+
+    @Autowired
+    private OTPPage otpPage;
 
     private ElementUtils elementUtils;
 
@@ -51,9 +56,11 @@ public class CALoadTest {
         welcomePage.drive();
         title = welcomePage.getTitle();
         assertThat(title).contains("Trust, Pension & Personal Bank Accounts | Cater Allen");
+
         /* Maybe put condition that no Exception thrown */
-       // welcomePage.clickLogOnOrRegister();
+        loginPage = welcomePage.clickLogOnOrRegister();
     }
+
     @Test
     void testIsLoginSuccesful() {
         loginPage.setWebDriver(driver);
@@ -61,6 +68,7 @@ public class CALoadTest {
         assertThat(title.equalsIgnoreCase(
                     "Welcome to Cater Allen Private Bank"));
     }
+
     @Test
     public void testIdEntered() {
         loginPage.setWebDriver(driver);
@@ -70,10 +78,17 @@ public class CALoadTest {
         loginPage.enterUserId();
         assertThat(loginPage.getEnteredLogInId().
                              equalsIgnoreCase(loginPage.getUserId()));
+        cAPacPage = loginPage.clickLogOnOrRegister();
     }
+
     @Test
     void TestPacEnteredSuccesfully() {
+
         String title;
+        String [] pacArray;
+        String [] enteredPacNos;
+        int pacNoCount = 0;
+
         cAPacPage.setWebDriver(driver);
         elementUtils = new ElementUtils(driver);
         cAPacPage.setElementUtils(elementUtils);
@@ -83,13 +98,19 @@ public class CALoadTest {
 
         cAPacPage.enterPacCode();
 
-       String [] pacArray = cAPacPage.getPacNo().split(",");
-       String [] enteredPacNos = cAPacPage.getEnteredPacCodes();
+        pacArray = cAPacPage.getPacNo().split(",");
+        enteredPacNos = cAPacPage.getEnteredPacCodes();
 
-        int pacNoCount = 0;
         for (String pacNo: pacArray){
                 assertThat(pacNo).isEqualTo(pacArray[pacNoCount]);
                 pacNoCount++;
         }
+    }
+
+    void TestPasswordEnteredSuccesfully () {
+        cAPacPage.enterPassword();
+        assertThat(cAPacPage.getEnteredPassword()
+                                .equalsIgnoreCase(cAPacPage.getPacPassword()));
+        otpPage = cAPacPage.clickLogOnOrRegister();
     }
 }

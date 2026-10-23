@@ -18,18 +18,34 @@ public class CAPacPage extends BasePage {
     private String pacNo;
     @Value("${spring.application.ca_pac_input_id}")
     private String pacInputId;
+    @Value("${spring.application.ca_pac_input_pword}")
+    private String pacInputPword;
+    @Value("${spring.application.ca_password}")
+    private String pacPassword;
+    @Value("${spring.application.ca_login_button_ID}")
+    private String caLoginButton;
     @Value("${spring.application.propertiespath}")
     protected String propertiespath;
+    private String caPacUrl;
 
+    public CAPacPage() {
+    }
+
+    public CAPacPage(String caPacUrl) {
+        this.caPacUrl = caPacUrl;
+    }
+
+    @Override
     public void drive(){
-        driver.get(propertiespath.concat(caPac));
+        String driverUrl = (caPacUrl != null) ?
+                caPacUrl : propertiespath.concat(caPac);
+        driver.get(driverUrl);
     }
-
-    public String getTitle(){
-        return driver.getTitle();
-    }
-
     public String getPacNo() { return pacNo; }
+
+    public String getPacPassword () {
+        return pacPassword;
+    }
 
     public void enterPacCode () {
         /* IS there a list of the same class doc elements? - like for PIN input */
@@ -45,6 +61,21 @@ public class CAPacPage extends BasePage {
                 count++;
         }
       }
+    }
+
+    public void enterPassword () {
+        WebElement passwordField = driver.findElement(By.id(pacInputPword));
+        passwordField.sendKeys(pacPassword);
+    }
+
+    public OTPPage clickLogOnOrRegister(){
+        elementUtils.clickElement(By.cssSelector(caLoginButton));
+        return new OTPPage();
+    }
+
+    public String getEnteredPassword() {
+        WebElement passwordField = driver.findElement(By.id(pacInputPword));
+        return passwordField.getText();
     }
 
     public String [] getEnteredPacCodes() {

@@ -16,6 +16,9 @@ public class CAWelcomePage extends BasePage{
     @Value("${spring.application.ca_welcome}")
     private String caWelcome;
 
+    @Value("${spring.application.ca_homepage}")
+    private String caHomePage;
+
     @Value("${spring.application.ca_login_button}")
     private String loginButton;
 
@@ -26,14 +29,16 @@ public class CAWelcomePage extends BasePage{
 
     }
 
+    public CAWelcomePage (String url) {
+
+    }
+    @Override
     public void drive(){
         driver.get(propertiespath.concat(caWelcome));
     }
-    public String getTitle(){
-        return driver.getTitle();
-    }
 
-    public void clickLogOnOrRegister(){
+    public CALoginPage clickLogOnOrRegister() {
         elementUtils.clickElement(By.cssSelector(loginButton));
+        return new CALoginPage(driver);
     }
 }

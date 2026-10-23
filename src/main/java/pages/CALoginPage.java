@@ -14,6 +14,11 @@ public class CALoginPage extends BasePage {
     @Value("${spring.application.ca_login}")
     private String caLogin;
 
+    @Value("${spring.application.ca_login_button_ID}")
+    private String caLoginButton;
+
+    private String loginURL;
+
     @Value("${spring.application.propertiespath}")
     protected String propertiespath;
 
@@ -28,12 +33,19 @@ public class CALoginPage extends BasePage {
 
     }
 
+    public CALoginPage(WebDriver driver) {
+        System.out.println(this.getClass() +" contructor called!");
+        this.driver = driver;
+        loginURL = driver.getCurrentUrl();
+    }
+
+    @Override
     public void drive(){
-        driver.get(propertiespath.concat(caLogin));
+        String driverUrl = (loginURL != null) ?
+                loginURL : propertiespath.concat(caLogin);
+        driver.get(driverUrl);
     }
-    public String getTitle(){
-        return driver.getTitle();
-    }
+
     public String getUserId (){
         return userId;
     }
@@ -46,5 +58,10 @@ public class CALoginPage extends BasePage {
     }
     public void enterUserId (){
         driver.findElement(By.id(userIdBox)).sendKeys(userId);
+    }
+
+    public CAPacPage clickLogOnOrRegister() {
+        elementUtils.clickElement(By.id(caLoginButton));
+        return new CAPacPage(driver.getCurrentUrl());
     }
 }
